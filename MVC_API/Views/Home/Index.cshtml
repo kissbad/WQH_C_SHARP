@@ -1,0 +1,64 @@
+﻿
+
+<div ng-app="app" ng-controller="control">
+    <div scroll>
+        <div ng-repeat="item in goodsList">
+            <img src="{{item.pict_url}}" alt="" /><br>
+            <strong>{{item.goods_name}}</strong><br>
+            <em>原价：{{item.price}}  折扣价：{{item.final_price}}</em><br>
+            <samp>30天销量：{{item.sellCount}}</samp><br>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script>
+        var app = angular.module('app', []);
+        app.directive("scroll", function ($window, $document) {
+            return function ($scope) {
+                angular.element($window).bind("scroll", function () {
+                    var pageYOffset = $window.pageYOffset;
+                    var clientHeight = $document[0].documentElement.clientHeight;
+                    var offsetHeight = $document[0].body.offsetHeight;
+                    if (pageYOffset + clientHeight > offsetHeight * 0.99) {
+                        //scope.shopWorkOnLoad是否正在加载,controller中定义
+                        if ($scope.shopWorkOnLoad == false) {
+                            //加载数据,controller中定义
+                            $scope.getGoodsList();//
+                        }
+                    }
+                });
+            };
+        });
+        app.controller('control', function ($scope, $http) {
+            $scope.page_index = 1;
+            $scope.goodsList = [];
+            $scope.shopWorkOnLoad = false;
+            $scope.getGoodsList = function () {
+                layer.load();
+                $scope.shopWorkOnLoad = true;
+                console.log($scope.page_index)
+                $http({
+                    method: 'POST',
+                    url: '../api/Help/getGoodsList',
+                    data: { page_index: $scope.page_index, page_size: 10 }
+                }).then(function successCallback(response) {
+                    if (response.data.error == '0') {
+                        console.log(response.data.data)
+                        for (var i = 0; i < response.data.data.length; i++) {
+                            $scope.goodsList.push(response.data.data[i]);
+                        }
+                        $scope.page_index++;
+                    } else {
+                        layer.alert(response.data.msg, { icon: 2 });
+                        //alert(response.data.msg)
+                    }
+                    $scope.shopWorkOnLoad = false;
+                    layer.closeAll('loading');
+                }, function errorCallback(response) {
+                    console.log(response);
+                });
+            };
+            $scope.getGoodsList();
+        })
+    </script>
+}

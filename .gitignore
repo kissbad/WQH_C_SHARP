@@ -1,0 +1,13 @@
+/.vs
+/ASP.net/bin
+/ASP.net/obj/Debug
+/MVC/bin
+/MVC/obj/Debug
+/WindowsService/bin/Debug
+/WQH/bin/Debug
+/WQH_Common/bin/Debug
+/WQH_Common/obj/Debug/TempPE
+/WQH_Common/obj/Debug
+/WQH/obj/Debug
+/WindowsService/obj/Debug
+*.pdb

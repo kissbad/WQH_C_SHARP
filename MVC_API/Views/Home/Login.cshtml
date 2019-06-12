@@ -1,0 +1,54 @@
+﻿
+@{
+    ViewBag.Title = "Login";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>View1</title>
+</head>
+<body>
+    <div>
+        <h2>Login</h2>
+
+        <div ng-app="app" ng-controller="control">
+            <input id="Text1" type="text" ng-model="logen_name" />
+            <input id="Text1" type="text" ng-model="pass_word" />
+            <input id="Button1" type="button" value="登录" ng-click="logen()" />
+        </div>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    <script src="~/Scripts/layer/layer.js"></script>
+    <script type="text/javascript" src="http://cdn.static.runoob.com/libs/angular.js/1.4.6/angular.min.js"></script>
+    <script>
+        var app = angular.module('app', []);
+        app.controller('control', function ($scope, $http) {
+            $scope.logen = function () {
+                $http({
+                    method: 'POST',
+                    url: '../api/Help/Login',
+                    data: { logen_name: $scope.logen_name, pass_word: $scope.pass_word }
+                }).then(function successCallback(response) {
+                    if (response.data.error == '0') {
+                        console.log(response.data.data)
+                        document.cookie = "user_name=" + response.data.data.user_name;
+                        location.href = "Index";
+                    } else {
+                        layer.alert(response.data.msg, { icon: 2 });
+                        //alert(response.data.msg)
+                    }
+                }, function errorCallback(response) {
+                    console.log(response);
+                });
+            };
+        })
+    </script>
+
+</body>
+</html>

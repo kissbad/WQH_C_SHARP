@@ -1,0 +1,30 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body>
+
+
+
+    <script type="text/javascript" src="https://cdn.bootcss.com/jquery/1.10.2/jquery.min.js"></script>
+    <script type="text/javascript">
+        var sss = "hahaha"
+        $.ajax({
+            type: "POST",
+            //接收格式
+            dataType: "json",   //xml,text,html,json
+            //发送格式（服务端对应类型转换数据）
+            contentType: "application/json;charset=UTF-8",   //application/x-www-form-urlencoded; charset=UTF-8
+            url: "/Interface/GoodsSaleLog",
+            data: JSON.stringify({ sss }),
+            success: function (data, textStatus, jqXHR) {
+            },
+            complete: function (jqXHR, textStatus) {
+                console.log(jqXHR);
+            }
+        })
+    </script>
+</body>
+</html>

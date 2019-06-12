@@ -1,0 +1,6 @@
+D:\C#\WQH_C_SHARP\KSOA\bin\Debug\KSOA.dll
+D:\C#\WQH_C_SHARP\KSOA\bin\Debug\KSOA.pdb
+D:\C#\WQH_C_SHARP\KSOA\obj\Debug\KSOA.csprojAssemblyReference.cache
+D:\C#\WQH_C_SHARP\KSOA\obj\Debug\KSOA.csproj.CoreCompileInputs.cache
+D:\C#\WQH_C_SHARP\KSOA\obj\Debug\KSOA.dll
+D:\C#\WQH_C_SHARP\KSOA\obj\Debug\KSOA.pdb

@@ -1,0 +1,133 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body ng-app="app" ng-controller="control">
+    <div class="wrapper">
+        <div class="gather-wrapper">
+            <h3 class="gather-title">销量与传播记录</h3>
+            <div class="gather-tabel" ng-repeat="item in SaleLog">
+                <div class="gt-thead">
+                    <span class="gt-date">{{item.date}} {{item.week}} </span>
+                    <div class="gt-tag-box">
+                        <span class="gt-tag">当日销量：{{item.date_rise}}</span>
+                        <span class="gt-tag" ng-if="item.LastPrice!=0">当日劵后价：{{item.LastPrice}}</span>
+                        <span class="gt-tag" ng-if="item.commission_rate!=0">当日佣金比：{{item.commission_rate}}%</span>
+                    </div>
+                    <em class="gt-flag">当前拥有<a href="javascript:void(0)" ng-click="layer_date(item.GoodsId,item.date)">{{item.collect_count}}</a>个联盟采集，点击查看采集轨迹</em>
+                </div>
+                <div class="gt-tbody">
+                    <table>
+                        <tbody>
+                            <tr ng-repeat="item2 in item.Details">
+                                <td width="120">{{item2.CrateDateTime|date:"MM/dd HH:mm"}}</td>
+                                <td><a ng-if="item2.collect_count!=0" ng-click="layer($event)" data-id="{{item2.GoodsId}}" data-ctime="{{item2.CrateDateTime}}" data-ptime="{{item2.previousTime}}" href="javascript:void(0)" class="unionnum">{{item2.collect_count}}个联盟</a></td>
+                                <td>
+                                    <i class="rise" ng-if="item2.rise>0"></i>
+                                    <i class="drop" ng-if="item2.rise<0"></i>
+                                    <span class="indexnum blue" ng-if="item2.rise!=0">{{item2.rise}}</span>
+                                </td>
+                                <td width="200">销量：<span class="salesnum">{{item2.SaleCount}}</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="https://cdn.bootcss.com/jquery/1.10.2/jquery.min.js"></script>
+    <script type="text/javascript" src="http://cdn.static.runoob.com/libs/angular.js/1.4.6/angular.min.js"></script>
+    <script>
+        var app = angular.module('app', []);
+        app.config(['$locationProvider', function ($locationProvider) {
+            $locationProvider.html5Mode({
+                enabled: true,
+                requireBase: false
+            });
+        }]);
+        app.controller('control', function ($scope, $location, $http) {
+            $scope.SaleLog = [];
+            $scope.pageIndex = 1;
+            $scope.get_GoodsSaleLog = function () {
+                $http({
+                    method: 'POST',
+                    url: 'Interface/GoodsSaleLog.ashx?item=' + $location.search().item,
+                    data: { pageIndex: $scope.pageIndex }
+                }).then(function successCallback(response, a, data) {
+                    //console.log(response);
+                    if (response.data.error == '0') {
+                        $scope.SaleLog = response.data.data
+                    } else {
+                        alert(response.data.msg)
+                    }
+                }, function errorCallback(response) {
+                    console.log(response);
+                });
+            };
+            $scope.get_GoodsSaleLog();
+            $scope.layer = function (event) {
+                var goodsId = $(event.target).attr('data-id'), begin_time = $(event.target).attr('data-ptime'), end_time = $(event.target).attr('data-ctime');
+                $scope.beginTime = begin_time;
+                $scope.endTime = end_time;
+                $http({
+                    method: 'POST',
+                    url: 'Interface/collectLog.ashx',
+                    data: {
+                        'GoodsId': goodsId,
+                        'begin_time': begin_time,
+                        'end_time': end_time,
+                    }
+                }).then(function successCallback(response) {
+                    console.log('asdasdasd')
+                    console.log(response);
+                    if (response.status == '200') {
+                        $scope.layerData = response.data;
+                        $scope.layerDatanum = response.data.length;
+                        console.log($scope.layerData);
+                    }
+                }, function errorCallback(response) {
+                    console.log(response);
+                });
+                layer.open({
+                    type: 1,
+                    title: "采集联盟信息",
+                    area: ['385px', '400px'],
+                    shadeClose: true,
+                    content: $(".unionInfo"),
+                });
+            }
+            $scope.layer_date = function (GoodsId, date) {
+                $scope.beginTime = date + ' 00:00:00';
+                $scope.endTime = date + ' 23:59:59';
+                $http({
+                    method: 'POST',
+                    url: 'Interface/collectLog.ashx?type=date',
+                    data: {
+                        'GoodsId': GoodsId,
+                        'date': date
+                    }
+                }).then(function successCallback(response) {
+                    //console.log(response);
+                    if (response.status == '200') {
+                        $scope.layerData = response.data;
+                        $scope.layerDatanum = response.data.length;
+                        console.log($scope.layerData);
+                    }
+                }, function errorCallback(response) {
+                    // 请求失败执行代码
+                });
+
+                layer.open({
+                    type: 1,
+                    title: "采集联盟信息",
+                    area: ['385px', '400px'],
+                    shadeClose: true,
+                    content: $(".unionInfo"),
+                });
+            }
+        });
+    </script>
+</body>
+</html>
