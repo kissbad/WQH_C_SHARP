@@ -65,5 +65,32 @@ namespace WQH
             }
             return sBuilder.ToString().ToUpper();
         }
+
+        public static string FormatTime(string str)
+        {
+            string[] arr = { };
+            if (str.Contains('-'))
+            {
+                arr = str.Split('-');
+            }
+            else if (str.Contains('.'))
+            {
+                arr = str.Split('.');
+            }
+            else if (str.Contains('/'))
+            {
+                arr = str.Split('/');
+            }
+
+            try
+            {
+                DateTime dateTime = new DateTime(int.Parse(arr[0]), int.Parse(arr[1]), int.Parse(arr[2]));
+                return dateTime.ToString("yyyy-MM-dd");
+            }
+            catch (Exception e)
+            {
+                throw new ApplicationException("日期转换失败");
+            }
+        }
     }
 }

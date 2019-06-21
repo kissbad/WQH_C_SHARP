@@ -47,5 +47,17 @@ namespace ASP.net
             Func<XmlDocument, string> p = WQH.Web.HTTP.Helper.FromXml;
             string request = WQH.Web.HTTP.Helper.GetString<XmlDocument>(webrequest, xml, p);
         }
+
+        protected void TextBox3_TextChanged(object sender, EventArgs e)
+        {
+            TextBox tb = sender as TextBox;
+            try
+            {
+                tb.Text = WQH.String.FormatTime(tb.Text);
+            }
+            catch (Exception ex) {
+                tb.Text = ex.Message;
+            }
+        }
     }
 }
