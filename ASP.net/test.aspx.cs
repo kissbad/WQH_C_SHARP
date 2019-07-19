@@ -50,14 +50,7 @@ namespace ASP.net
 
         protected void TextBox3_TextChanged(object sender, EventArgs e)
         {
-            TextBox tb = sender as TextBox;
-            try
-            {
-                tb.Text = WQH.String.FormatTime(tb.Text);
-            }
-            catch (Exception ex) {
-                tb.Text = ex.Message;
-            }
+            new WQH.Office.Excel("D://11111.xlsx");
         }
     }
 }
