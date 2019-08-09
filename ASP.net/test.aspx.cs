@@ -48,9 +48,19 @@ namespace ASP.net
             string request = WQH.Web.HTTP.Helper.GetString<XmlDocument>(webrequest, xml, p);
         }
 
+        public class test_o
+        {
+            public string A1 { get; set; } = "1";
+            public string A2 { get; set; } = "2";
+            public string A3 { get; set; } = "3";
+            public string A4 { get; set; } = "4";
+        }
+
         protected void TextBox3_TextChanged(object sender, EventArgs e)
         {
-            new WQH.Office.Excel("D://11111.xlsx");
+            List<test_o> list = new List<test_o>();
+            list.Add(new test_o());
+            WQH.Office.Excel.cExcel<test_o>(list);
         }
     }
 }
