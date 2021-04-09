@@ -28,24 +28,8 @@ namespace ASP.net
 
         protected void Button3_Click(object sender, EventArgs e)
         {
-            XmlDocument xml = new XmlDocument();
-            XmlElement Object = xml.CreateElement("Object");
-            Object.SetAttribute("Id", "DataObjectId");
-            XmlElement jh = xml.CreateElement("jh");
-            jh.SetAttribute("xmlns", "http://cmsland.com/yjj_qyjk_cgrk.xsd");
-            Object.AppendChild(jh);
-            xml.AppendChild(Object);
+            var a = BusinessClass.TaoBao.tbk_DgMaterialOptional.get("https://detail.tmall.com/item.htm?id=525706128826&spm=a230r.1.1997525049.3.29d13ad1T7p6yi");
 
-            string url = "https://219.135.157.154:8445/data/clientAccept/toUploadFile.do";
-            HttpWebRequest webrequest = (HttpWebRequest)HttpWebRequest.Create(url);
-            webrequest.ClientCertificates.Add(
-                WQH.Web.HTTP.Certificate.GetCertificateFromStore(System.Security.Cryptography.X509Certificates.StoreName.
-                My, System.Security.Cryptography.X509Certificates.StoreLocation.LocalMachine,
-                "广东三丰医药有限公司"));
-            webrequest.Method = "post";
-
-            Func<XmlDocument, string> p = WQH.Web.HTTP.Helper.FromXml;
-            string request = WQH.Web.HTTP.Helper.GetString<XmlDocument>(webrequest, xml, p);
         }
 
         public class test_o
