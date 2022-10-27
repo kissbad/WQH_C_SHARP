@@ -13,7 +13,7 @@ namespace WQH.Web.HTTP
         public static X509Certificate get_Certificates(string cert_path, string password)
         {
             ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback(CheckValidationResult);
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11| SecurityProtocolType.Tls12;
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
             X509Certificate cer = new X509Certificate(cert_path, password);
             return cer;
         }
@@ -40,9 +40,9 @@ namespace WQH.Web.HTTP
         /// <param name="CurrentUser">指定 X.509 证书存储位置的枚举值之一</param>
         /// <param name="certName">证书名称</param>
         /// <returns></returns>
-        public static X509Certificate2 GetCertificateFromStore(StoreName storeNmae, StoreLocation CurrentUser,string certName)
+        public static X509Certificate2 GetCertificateFromStore(StoreName storeNmae, StoreLocation CurrentUser, string certName)
         {
-            X509Store store = new X509Store(storeNmae,CurrentUser);
+            X509Store store = new X509Store(storeNmae, CurrentUser);
             try
             {
                 store.Open(OpenFlags.ReadOnly | OpenFlags.OpenExistingOnly);
@@ -52,6 +52,30 @@ namespace WQH.Web.HTTP
                 if (signingCert.Count == 0)
                     return null;
                 return signingCert[0];
+            }
+            finally
+            {
+                store.Close();
+            }
+
+        }
+
+        public static X509Certificate2 GetCertificateFromFriendlyName(StoreName storeNmae, StoreLocation CurrentUser, string FriendlyName)
+        {
+            X509Store store = new X509Store(storeNmae, CurrentUser);
+            X509Certificate2 cer = null;
+            try
+            {
+                store.Open(OpenFlags.ReadOnly | OpenFlags.OpenExistingOnly);
+                X509Certificate2Collection certCollection = store.Certificates;
+                X509Certificate2Collection currentCerts = certCollection.Find(X509FindType.FindByTimeValid, DateTime.Now, false);
+                int c = currentCerts.Count;
+                foreach (var i in currentCerts)
+                {
+                    if (i.FriendlyName == FriendlyName)
+                        cer = i;
+                }
+                return cer;
             }
             finally
             {
