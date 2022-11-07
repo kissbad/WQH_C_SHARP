@@ -191,7 +191,8 @@ D:\C#\WQH_C_SHARP\MVC_API\bin\zh-Hans\System.Web.Razor.resources.dll
 D:\C#\WQH_C_SHARP\MVC_API\bin\zh-Hans\System.Web.WebPages.resources.dll
 D:\C#\WQH_C_SHARP\MVC_API\bin\zh-Hans\System.Web.WebPages.Deployment.resources.dll
 D:\C#\WQH_C_SHARP\MVC_API\bin\zh-Hans\System.Web.WebPages.Razor.resources.dll
-D:\C#\WQH_C_SHARP\MVC_API\obj\Debug\MVC_API.csprojAssemblyReference.cache
 D:\C#\WQH_C_SHARP\MVC_API\obj\Debug\MVC_API.csproj.CopyComplete
 D:\C#\WQH_C_SHARP\MVC_API\obj\Debug\MVC_API.dll
 D:\C#\WQH_C_SHARP\MVC_API\obj\Debug\MVC_API.pdb
+D:\C#\WQH_C_SHARP\MVC_API\obj\Debug\MVC_API.csproj.AssemblyReference.cache
+D:\C#\WQH_C_SHARP\MVC_API\obj\Debug\MVC_API.csproj.CoreCompileInputs.cache
