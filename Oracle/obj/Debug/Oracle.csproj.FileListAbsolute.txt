@@ -25,6 +25,4 @@ D:\C#\WQH_C_SHARP\Oracle\obj\Debug\Oracle.exe
 D:\C#\WQH_C_SHARP\Oracle\obj\Debug\Oracle.pdb
 D:\C#\WQH_C_SHARP\Oracle\bin\Debug\Newtonsoft.Json.dll
 D:\C#\WQH_C_SHARP\Oracle\bin\Debug\Newtonsoft.Json.xml
-D:\C#\WQH_C_SHARP\Oracle\obj\Debug\Oracle.csproj.AssemblyReference.cache
-D:\C#\WQH_C_SHARP\Oracle\obj\Debug\Oracle.csproj.SuggestedBindingRedirects.cache
-D:\C#\WQH_C_SHARP\Oracle\obj\Debug\Oracle.csproj.CoreCompileInputs.cache
+D:\C#\WQH_C_SHARP\Oracle\obj\Debug\Oracle.csprojAssemblyReference.cache

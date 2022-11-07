@@ -37,8 +37,7 @@ D:\C#\WQH_C_SHARP\BusinessClass\bin\Debug\WQH.dll
 D:\C#\WQH_C_SHARP\BusinessClass\bin\Debug\WQH.pdb
 D:\C#\WQH_C_SHARP\BusinessClass\bin\Debug\Dapper.xml
 D:\C#\WQH_C_SHARP\BusinessClass\bin\Debug\Newtonsoft.Json.xml
+D:\C#\WQH_C_SHARP\BusinessClass\obj\Debug\BusinessClass.csprojAssemblyReference.cache
 D:\C#\WQH_C_SHARP\BusinessClass\obj\Debug\BusinessClass.csproj.CopyComplete
 D:\C#\WQH_C_SHARP\BusinessClass\obj\Debug\BusinessClass.dll
 D:\C#\WQH_C_SHARP\BusinessClass\obj\Debug\BusinessClass.pdb
-D:\C#\WQH_C_SHARP\BusinessClass\obj\Debug\BusinessClass.csproj.AssemblyReference.cache
-D:\C#\WQH_C_SHARP\BusinessClass\obj\Debug\BusinessClass.csproj.CoreCompileInputs.cache
