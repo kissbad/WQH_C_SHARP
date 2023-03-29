@@ -62,7 +62,6 @@ namespace Oracle
                     OracleDataAdapter adapter = new OracleDataAdapter(cmd);
                     DataTable datatable = new DataTable();
                     adapter.Fill(datatable);
-
                     return datatable;
                 }
             }
