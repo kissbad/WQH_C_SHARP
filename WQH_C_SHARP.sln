@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29102.190
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33516.290
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsService", "WindowsService\WindowsService.csproj", "{23731CF8-8D7A-4944-82E8-64E9EA11712C}"
 EndProject
@@ -16,6 +16,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KSOA", "KSOA\KSOA.csproj", "{475C714B-EDF3-49FA-AF25-69521A41BB94}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Oracle", "Oracle\Oracle.csproj", "{B59CF89A-B819-4B14-9A55-70AE3D193B7E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebCore", "WebCore\WebCore.csproj", "{323764BF-E403-4990-BF35-C81C4642F467}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -171,6 +173,26 @@ Global
 		{B59CF89A-B819-4B14-9A55-70AE3D193B7E}.Release|x64.Build.0 = Release|Any CPU
 		{B59CF89A-B819-4B14-9A55-70AE3D193B7E}.Release|x86.ActiveCfg = Release|Any CPU
 		{B59CF89A-B819-4B14-9A55-70AE3D193B7E}.Release|x86.Build.0 = Release|Any CPU
+		{323764BF-E403-4990-BF35-C81C4642F467}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{323764BF-E403-4990-BF35-C81C4642F467}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{323764BF-E403-4990-BF35-C81C4642F467}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{323764BF-E403-4990-BF35-C81C4642F467}.Debug|ARM.Build.0 = Debug|Any CPU
+		{323764BF-E403-4990-BF35-C81C4642F467}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{323764BF-E403-4990-BF35-C81C4642F467}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{323764BF-E403-4990-BF35-C81C4642F467}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{323764BF-E403-4990-BF35-C81C4642F467}.Debug|x64.Build.0 = Debug|Any CPU
+		{323764BF-E403-4990-BF35-C81C4642F467}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{323764BF-E403-4990-BF35-C81C4642F467}.Debug|x86.Build.0 = Debug|Any CPU
+		{323764BF-E403-4990-BF35-C81C4642F467}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{323764BF-E403-4990-BF35-C81C4642F467}.Release|Any CPU.Build.0 = Release|Any CPU
+		{323764BF-E403-4990-BF35-C81C4642F467}.Release|ARM.ActiveCfg = Release|Any CPU
+		{323764BF-E403-4990-BF35-C81C4642F467}.Release|ARM.Build.0 = Release|Any CPU
+		{323764BF-E403-4990-BF35-C81C4642F467}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{323764BF-E403-4990-BF35-C81C4642F467}.Release|ARM64.Build.0 = Release|Any CPU
+		{323764BF-E403-4990-BF35-C81C4642F467}.Release|x64.ActiveCfg = Release|Any CPU
+		{323764BF-E403-4990-BF35-C81C4642F467}.Release|x64.Build.0 = Release|Any CPU
+		{323764BF-E403-4990-BF35-C81C4642F467}.Release|x86.ActiveCfg = Release|Any CPU
+		{323764BF-E403-4990-BF35-C81C4642F467}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
