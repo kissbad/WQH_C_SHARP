@@ -42,3 +42,6 @@ D:\C#\WQH_C_SHARP\BusinessClass\obj\Debug\BusinessClass.dll
 D:\C#\WQH_C_SHARP\BusinessClass\obj\Debug\BusinessClass.pdb
 D:\C#\WQH_C_SHARP\BusinessClass\obj\Debug\BusinessClass.csproj.AssemblyReference.cache
 D:\C#\WQH_C_SHARP\BusinessClass\obj\Debug\BusinessClass.csproj.CoreCompileInputs.cache
+D:\C#\WQH_C_SHARP\BusinessClass\bin\Debug\Spire.Pdf.dll
+D:\C#\WQH_C_SHARP\BusinessClass\bin\Debug\Microsoft.mshtml.dll
+D:\C#\WQH_C_SHARP\BusinessClass\bin\Debug\Spire.Pdf.xml
