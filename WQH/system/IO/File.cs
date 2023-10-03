@@ -19,20 +19,24 @@ namespace WQH.system.IO
             {
                 Directory.CreateDirectory(Logath);
             }
-            FileStream stream = new FileStream(Logath + System.DateTime.Today.ToString("yyyyMMdd") + ".txt", FileMode.OpenOrCreate, FileAccess.Write);
-            StreamWriter writer = new StreamWriter(stream);
-            writer.BaseStream.Seek(0L, SeekOrigin.End);
-            if (is_sj == 1)
+            using (FileStream stream = new FileStream(Logath + System.DateTime.Today.ToString("yyyyMMdd") + ".txt", FileMode.OpenOrCreate, FileAccess.Write))
             {
-                writer.WriteLine(str + ": " + strMsg);
+                using (StreamWriter writer = new StreamWriter(stream))
+                {
+                    writer.BaseStream.Seek(0L, SeekOrigin.End);
+                    if (is_sj == 1)
+                    {
+                        writer.WriteLine(str + ": " + strMsg);
+                    }
+                    else
+                    {
+                        writer.WriteLine(strMsg);
+                    }
+                    writer.Flush();
+                    writer.Close();
+                }
+                stream.Close();
             }
-            else
-            {
-                writer.WriteLine(strMsg);
-            }
-            writer.Flush();
-            writer.Close();
-            stream.Close();
         }
     }
 }
