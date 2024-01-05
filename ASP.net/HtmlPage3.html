@@ -1,0 +1,420 @@
+﻿<template>
+    <div class="hello">
+        <div id="left">
+            {{sumtask}}
+        </div>
+        <div id="right">
+            <img alt="Vue logo" src="../assets/logo.png" width="410px" height="330px ">
+            <h1>{{ msg }}</h1>
+            <!-- <el-input
+                placeholder="请输入人员ID并点击打印"
+                v-model="input"
+                style="width: 300px;height: 50px;"
+                type="number"
+                @keyup.enter.native="triggerClick"
+                id="plateInput"
+                clearable>
+            </el-input>
+            <el-button type="primary" @click="employeeidprint" :disabled="!input" ref="btn">领取并打印</el-button> -->
+            <!-- 备注：取消按人员打印，采用直接打印 -->
+            <el-button type="primary" @click="print" style="width: 40%;">打印</el-button>
+            <el-button type="primary" @click="patchwork" style="width: 40%;">补打</el-button>
+        </div>
+    </div>
+</template>
+
+<script>import { getLodop } from '../../public/js/LodopFuncs'
+import jquery from '../../public/js/jquery.min'
+import getResult from '../../public/js/getresult'
+import uptask from '../../public/js/uptask'
+import stadjust from '../../public/js/stadjust'
+import trpick from '../../public/js/trpick(min)'
+
+// VUE_CKRWS_SZF_V;
+// VUE_SJD_SZF_V;
+// VUE_BHD_SZF_V;
+// VUE_JHD_SZF_V;
+// VUE_JHDMX_SZF_V;
+// VUE_JHDMXS_SZF_V;
+// 所用到视图
+export default {
+	name: 'HelloWorld',
+	props: {
+		msg: String
+	},
+	// mounted(){
+	// 	document.getElementById("plateInput").focus()
+	// },
+	// 备注：取消按人员打印，采用直接打印（原作用为锁定输入框光标）
+    data() {
+		return {
+			database: 'sf_yk',
+			input: '',
+			employeeid: '',
+			tasktype: '',
+			task:'',
+			uptaskzd: [],
+			uptaskxd: [],
+			stadjustzd: [],
+			trpickzd: [],
+			trpickxd: [],
+			trpicksd: [],
+			sumtask:'',
+		}
+	},
+    created() {
+		this.timer = setInterval(() => {setTimeout(this.selectsumtask(), 0)},1000); //轮询
+    },
+	beforeDestroy() {
+		clearInterval(this.timer);
+	},
+    methods: {
+		// triggerClick (){
+		// 	this.$refs.btn.$emit('click')
+		// },
+		// 备注：取消按人员打印，采用直接打印（原作用为输入框为空禁止打印）
+
+		// employeeidprint() {
+		// 	let LODOP = getLodop(); //调用getLodop获取LODOP对象
+		// 	LODOP.SET_PRINT_PAGESIZE(3,'72mm',0,"");
+		// 	let check_employeeid = getResult("SELECT a.employeeid FROM pub_employee a WHERE a.employeeid = "+this.input,this.database);
+		// 	if (this.input === "" || check_employeeid == "") {
+		// 	    //查询人员ID是否存在
+		// 		this.$alert('未输入正确的人员ID', '警告', {
+		// 		    confirmButtonText: '确定',
+		// 		});
+		// 		location.reload();
+		// 	} else {
+		// 		let convert_employeeid = JSON.parse(JSON.stringify(check_employeeid[0]));
+		// 		this.employeeid = convert_employeeid.EMPLOYEEID;
+		// 		let select_task = getResult("SELECT COUNT(1)COUNT FROM VUE_CKRWS_SZF_V a WHERE a.COUNT <>0",this.database);
+		// 		let convert_task = JSON.parse(JSON.stringify(select_task[0])).COUNT;
+		// 		//查询有多少任务
+		// 		if (convert_task == 0){
+		// 			this.$alert('当前无未领取任务', '警告', {
+		// 				confirmButtonText: '确定'
+		// 			});
+		// 			location.reload();
+		// 		} else {
+		// 			let select_tasktype = getResult("SELECT RWLX FROM VUE_CKRWS_SZF_V WHERE nvl(COUNT,0) <> 0 ORDER BY DBMS_RANDOM.VALUE()",this.database);
+		// 			//1上架 2补货 3拣货
+		// 			let convert_tasktype = JSON.parse(JSON.stringify(select_tasktype[0])).RWLX;
+		// 			this.tasktype = convert_tasktype;
+		// 			if (convert_tasktype == 1) {
+		// 				//查询未领取上架单，并打印
+		// 				let select_taskidzd = getResult("SELECT COMEFROM, COMPANYID, CREDATE, COMPANYNAME, TASKID, CHECKMANNAME " +
+		// 											"FROM VUE_SJD_SZF_V WHERE ZDUSESTATUS = 1 AND NVL(PRINTMANID, 0) = 0 AND PRINTDATE IS NULL " +
+		// 											"AND NVL(PRINTCOUNT, 0) = 0 AND NVL(DTLKEEPMANID, 0) = 0 AND XDUSESTATUS = 1 " +
+		// 											"GROUP BY COMEFROM, COMPANYID, CREDATE, COMPANYNAME, TASKID, CHECKMANNAME",this.database);
+		// 				let convert_taskidzd = JSON.parse(JSON.stringify(select_taskidzd[0]));
+		// 				this.task = convert_taskidzd.TASKID;
+		// 				this.uptaskzd.push(convert_taskidzd);
+		// 				let select_taskidxd = getResult("SELECT goodsid,goodsname,goodstype,factoryname,goodsunit,dtlgoodsqty, " +
+		// 											"floor(A.dtlgoodsqty / packsize) zj, " +
+		// 											"decode(substr((A.dtlgoodsqty - floor(A.dtlgoodsqty / packsize) * packsize), 1, 1), '.', '0' || " +
+		// 											"(A.dtlgoodsqty - floor(A.dtlgoodsqty / packsize) * packsize), " +
+		// 											"(dtlgoodsqty - floor(A.dtlgoodsqty / packsize) * packsize)) sj,  " +
+		// 											"lotno, sthousename, posno, DECODE(NVL(ecodeflag,0),0,'否','是') ecodeflag, iodtlid FROM bms_st_io_dtl_finputin_v a " +
+		// 											"WHERE USESTATUS = 1 AND NVL(DTLKEEPMANID, 0) = 0 AND A.TASKID = "+this.task,this.database);
+		// 				for (let i in select_taskidxd){
+		// 					this.uptaskxd.push(select_taskidxd[i]);
+		// 				}
+		// 				uptask.bind(this)();
+		// 				this.uptaskzd = [];
+		// 				this.uptaskxd = [];
+		// 				let update_taskidzd = getResult("update BMS_UP_TASK_DOC set PRINTMANID= "+convert_employeeid.EMPLOYEEID+
+		// 												",PRINTDATE=SYSDATE,PRINTCOUNT=nvl(PRINTCOUNT,0)+1 where TASKID = "+this.task,this.database);
+
+		// 			} else if (convert_tasktype == 2) {
+		// 				//查询未领取补货单，并打印
+		// 				let select_stadjustidzd = getResult("SELECT A.STORERNAME,A.CREDATE,A.STADJUSTID,A.SOURCEID,A.HPXX,A.PHXX,A.SL,A.POSNO,A.STHOUSENAME, " +
+		// 												"A.NEWPOSNO,A.NEWSTHOUSENAME FROM VUE_BHD_SZF_V A WHERE ROWNUM = 1 " +
+		// 												"AND PRINTCOUNT IS NULL AND PRINTDATE IS NULL AND PRINTMANID IS NULL",this.database);
+		// 				let convert_stadjustidzd = JSON.parse(JSON.stringify(select_stadjustidzd[0]));
+		// 				this.task = convert_stadjustidzd.STADJUSTID;
+		// 				this.stadjustzd.push(convert_stadjustidzd);
+		// 				stadjust.bind(this)();
+		// 				this.stadjustzd = [];
+		// 				let update_stadjustidzd = getResult("update BMS_ST_ADJUST_TMP set PRINTMANID= "+convert_employeeid.EMPLOYEEID+
+		// 													",PRINTDATE=SYSDATE,PRINTCOUNT=nvl(PRINTCOUNT,0)+1 where STADJUSTID = "+this.task,this.database);
+
+		// 			} else if (convert_tasktype == 3) {
+		// 				//查询未领取拣货单，并打印
+		// 				let select_trpickidzd = getResult("SELECT A.PICKDOCID, A.WAVENO, A.CREDATE, A.WAVEID, A.COMPANYNAME, A.INVTYPENAME, A.MERMECDEPTNAME, A.GOODSDEPTNAME,A.COMEFROM, " +
+		// 										"A.ISRECFLAG, A.MEMO, A.CONSIGNEE, A.PLACETYPENAME, A.TRANSLINENAME, A.INPUTMANNAME,A.GOODSUNITFLAG " +
+		// 										"FROM VUE_JHD_SZF_V a WHERE a.xdusestatus = 2 and a.zdusestatus = 1 and a.drawstatus = 0 AND NVL(a.pickmanid, 0) = 0 " +
+		// 										"AND a.pickdate IS NULL and NVL(a.printcount, 0) = 0 " +
+		// 										"AND NVL(a.finishmanid, 0) = 0 Group By A.PICKDOCID, A.WAVENO, A.CREDATE, A.WAVEID, A.COMPANYNAME, A.INVTYPENAME, A.GOODSDEPTNAME,A.COMEFROM, " +
+		// 										"A.MERMECDEPTNAME, A.ISRECFLAG, A.MEMO, A.CONSIGNEE, A.PLACETYPENAME, A.TRANSLINENAME, A.INPUTMANNAME,A.GOODSUNITFLAG",
+		// 										this.database);
+		// 				let convert_trpickidzd = JSON.parse(JSON.stringify(select_trpickidzd[0]));
+		// 				this.task = convert_trpickidzd.PICKDOCID;
+		// 				this.trpickzd.push(convert_trpickidzd);
+		// 				let select_trpickidxd = getResult("SELECT A.GOODSNAME,A.GOODSTYPE,A.LOTNO,A.FACTORYNAME,A.HOLDERSNAME,A.PACKSIZE,A.ZL,A.ZJ,A.SJ,A.POSNO, " +
+		// 										"A.STHOUSENAME,A.ECODEFLAG FROM VUE_JHDMX_SZF_V A WHERE PICKDOCID = " + this.task,this.database);
+		// 				for (let i in select_trpickidxd){
+		// 					this.trpickxd.push(select_trpickidxd[i]);
+		// 				}
+		// 				let select_trpickidsd = getResult("SELECT A.PICKDOCID,A.JHMXS,A.JHKCS,TO_char(SYSDATE,'yyyy-MM-dd hh24:mi:ss')RQ FROM VUE_JHDMXS_SZF_V A " +
+		// 										"WHERE A.PICKDOCID = "+this.task,this.database);
+		// 				let convert_trpickidsd = JSON.parse(JSON.stringify(select_trpickidsd[0]));
+		// 				this.trpicksd.push(convert_trpickidsd);
+		// 				trpick.bind(this)();
+		// 				this.trpickzd = [];
+		// 				this.trpickxd = [];
+		// 				this.trpicksd = [];
+		// 				let update_trpickzd = getResult("update BMS_TR_PICK_DOC set PRINTMANID= "+convert_employeeid.EMPLOYEEID+
+		// 												",PRINTDATE=SYSDATE,PRINTCOUNT=nvl(PRINTCOUNT,0)+1 where PICKDOCID = "+this.task,this.database);
+		// 			} else {
+		// 				this.$alert('未知问题，请联系管理员', '警告', {
+		// 				    confirmButtonText: '确定'
+		// 				});
+		// 			}
+		// 		}
+		// 	this.input = '';
+		// 	}
+		// },
+		// 备注：取消按人员打印，采用直接打印
+
+		patchwork() {
+			let LODOP = getLodop(); //调用getLodop获取LODOP对象
+			LODOP.SET_PRINT_PAGESIZE(3,'72mm',0,"");
+			// if (this.employeeid === "") {
+			//     //查询人员ID是否存在
+			// 	this.$alert('未输入正确的人员ID', '警告', {
+			// 	    confirmButtonText: '确定'
+			// 	});
+			// } else {
+			// 备注：取消按人员打印，采用直接打印
+				if (this.task == 0){
+					this.$alert('当前无补打任务', '警告', {
+						confirmButtonText: '确定'
+					});
+				} else {
+					//1上架 2补货 3拣货
+					if (this.tasktype == 1) {
+						//查询未领取上架单，并打印
+						let select_taskidzd = getResult("SELECT COMEFROM, COMPANYID, CREDATE, COMPANYNAME, TASKID, CHECKMANNAME " +
+													"FROM VUE_SJD_SZF_V WHERE TASKID = " + this.task +
+													"GROUP BY COMEFROM, COMPANYID, CREDATE, COMPANYNAME, TASKID, CHECKMANNAME",this.database);
+						let convert_taskidzd = JSON.parse(JSON.stringify(select_taskidzd[0]));
+						this.task = convert_taskidzd.TASKID;
+						this.uptaskzd.push(convert_taskidzd);
+						let select_taskidxd = getResult("SELECT goodsid,goodsname,goodstype,factoryname,goodsunit,dtlgoodsqty, " +
+													"floor(A.dtlgoodsqty / packsize) zj, " +
+													"decode(substr((A.dtlgoodsqty - floor(A.dtlgoodsqty / packsize) * packsize), 1, 1), '.', '0' || " +
+													"(A.dtlgoodsqty - floor(A.dtlgoodsqty / packsize) * packsize), " +
+													"(dtlgoodsqty - floor(A.dtlgoodsqty / packsize) * packsize)) sj,  " +
+													"lotno, sthousename, posno, DECODE(NVL(ecodeflag,0),0,'否','是') ecodeflag, iodtlid FROM bms_st_io_dtl_finputin_v a " +
+													"WHERE USESTATUS = 1 AND NVL(DTLKEEPMANID, 0) = 0 AND A.TASKID = "+this.task,this.database);
+						for (let i in select_taskidxd){
+							this.uptaskxd.push(select_taskidxd[i]);
+						}
+						uptask.bind(this)();
+						this.uptaskzd = [];
+						this.uptaskxd = [];
+						let update_taskidzd = getResult("update BMS_UP_TASK_DOC set PRINTMANID= "+this.employeeid+
+														",PRINTDATE=SYSDATE,PRINTCOUNT=nvl(PRINTCOUNT,0)+1 where TASKID = "+this.task,this.database);
+
+					} else if (this.tasktype == 2) {
+						//查询未领取补货单，并打印
+						let select_stadjustidzd = getResult("SELECT A.STORERNAME,A.CREDATE,A.STADJUSTID,A.SOURCEID,A.HPXX,A.PHXX,A.SL,A.POSNO,A.STHOUSENAME, " +
+														"A.NEWPOSNO,A.NEWSTHOUSENAME FROM VUE_BHD_SZF_V A WHERE ROWNUM = 1 AND STADJUSTID = "+this.task,this.database);
+						let convert_stadjustidzd = JSON.parse(JSON.stringify(select_stadjustidzd[0]));
+						this.task = convert_stadjustidzd.STADJUSTID;
+						this.stadjustzd.push(convert_stadjustidzd);
+						stadjust.bind(this)();
+						this.stadjustzd = [];
+						let update_stadjustidzd = getResult("update BMS_ST_ADJUST_TMP set PRINTMANID= "+this.employeeid+
+															",PRINTDATE=SYSDATE,PRINTCOUNT=nvl(PRINTCOUNT,0)+1 where STADJUSTID = "+this.task,this.database);
+
+					} else if (this.tasktype == 3) {
+						//查询未领取拣货单，并打印
+						let select_trpickidzd = getResult("SELECT A.PICKDOCID, A.WAVENO, A.CREDATE, A.WAVEID, A.COMPANYNAME, A.INVTYPENAME, A.MERMECDEPTNAME, A.GOODSDEPTNAME,A.COMEFROM, " +
+												"A.ISRECFLAG, A.MEMO, A.CONSIGNEE, A.PLACETYPENAME, A.TRANSLINENAME, A.INPUTMANNAME,A.GOODSUNITFLAG " +
+												"FROM VUE_JHD_SZF_V A WHERE PICKDOCID = " + this.task +
+												"Group By A.PICKDOCID, A.WAVENO, A.CREDATE, A.WAVEID, A.COMPANYNAME, A.INVTYPENAME, A.GOODSDEPTNAME,A.COMEFROM, " +
+												"A.MERMECDEPTNAME, A.ISRECFLAG, A.MEMO, A.CONSIGNEE, A.PLACETYPENAME, A.TRANSLINENAME, A.INPUTMANNAME,A.GOODSUNITFLAG",
+												this.database);
+						let convert_trpickidzd = JSON.parse(JSON.stringify(select_trpickidzd[0]));
+						this.task = convert_trpickidzd.PICKDOCID;
+						this.trpickzd.push(convert_trpickidzd);
+						let select_trpickidxd = getResult("SELECT A.GOODSNAME,A.GOODSTYPE,A.LOTNO,A.FACTORYNAME,A.HOLDERSNAME,A.PACKSIZE,A.ZL,A.ZJ,A.SJ,A.POSNO, " +
+												"A.STHOUSENAME,A.ECODEFLAG FROM VUE_JHDMX_SZF_V A WHERE PICKDOCID = " + this.task,this.database);
+						for (let i in select_trpickidxd){
+							this.trpickxd.push(select_trpickidxd[i]);
+						}
+						let select_trpickidsd = getResult("SELECT A.PICKDOCID,A.JHMXS,A.JHKCS,TO_char(SYSDATE,'yyyy-MM-dd hh24:mi:ss')RQ FROM VUE_JHDMXS_SZF_V A " +
+												"WHERE A.PICKDOCID = "+this.task,this.database);
+						let convert_trpickidsd = JSON.parse(JSON.stringify(select_trpickidsd[0]));
+						this.trpicksd.push(convert_trpickidsd);
+						trpick.bind(this)();
+						this.trpickzd = [];
+						this.trpickxd = [];
+						this.trpicksd = [];
+						let update_trpickzd = getResult("update BMS_TR_PICK_DOC set PRINTMANID= "+this.employeeid+
+														",PRINTDATE=SYSDATE,PRINTCOUNT=nvl(PRINTCOUNT,0)+1 where PICKDOCID = "+this.task,this.database);
+					} else {
+						this.$alert('未知问题，请联系管理员', '警告', {
+						    confirmButtonText: '确定'
+						});
+					}
+				}
+			// this.input = '';
+			// }
+		},
+
+		selectsumtask() {
+			let select_sumtask = getResult("SELECT nvl(SUM(A.COUNT),0)COUNT FROM VUE_CKRWS_SZF_V a WHERE a.COUNT <>0",this.database);
+			let convert_sumtask = JSON.parse(JSON.stringify(select_sumtask[0])).COUNT;
+			this.sumtask = convert_sumtask;
+			console.error(this.sumtask);
+
+		},
+
+		print() {
+			let LODOP = getLodop(); //调用getLodop获取LODOP对象
+			LODOP.SET_PRINT_PAGESIZE(3,'72mm',0,"");
+			let select_task = getResult("SELECT nvl(SUM(A.COUNT),0)COUNT FROM VUE_CKRWS_SZF_V a WHERE a.COUNT <>0",this.database);
+			let convert_task = JSON.parse(JSON.stringify(select_task[0])).COUNT;
+			//查询有多少任务
+			if (convert_task == 0){
+				this.$alert('当前无未领取任务', '警告', {
+					confirmButtonText: '确定'
+				});
+				location.reload();
+			} else {
+				let select_tasktype = getResult("SELECT RWLX FROM VUE_CKRWS_SZF_V WHERE nvl(COUNT,0) <> 0",this.database);
+				//1上架 2补货 3拣货
+				let convert_tasktype = JSON.parse(JSON.stringify(select_tasktype[0])).RWLX;
+				this.tasktype = convert_tasktype;
+				if (convert_tasktype == 1) {
+					//查询未领取上架单，并打印
+					let select_taskidzd = getResult("SELECT COMEFROM, COMPANYID, CREDATE, COMPANYNAME, TASKID, CHECKMANNAME,MAX(ECODEFLAG)ECODEFLAG " +
+												"FROM VUE_SJD_SZF_V WHERE ZDUSESTATUS = 1 AND NVL(PRINTMANID, 0) = 0 AND PRINTDATE IS NULL " +
+												"AND NVL(PRINTCOUNT, 0) = 0 AND NVL(DTLKEEPMANID, 0) = 0 AND XDUSESTATUS = 1 " +
+												"GROUP BY COMEFROM, COMPANYID, CREDATE, COMPANYNAME, TASKID, CHECKMANNAME",this.database);
+					let convert_taskidzd = JSON.parse(JSON.stringify(select_taskidzd[0]));
+					this.task = convert_taskidzd.TASKID;
+					this.uptaskzd.push(convert_taskidzd);
+					let select_taskidxd = getResult("SELECT goodsid,goodsname,goodstype,factoryname,goodsunit,dtlgoodsqty, " +
+												"floor(A.dtlgoodsqty / packsize) zj, " +
+												"decode(substr((A.dtlgoodsqty - floor(A.dtlgoodsqty / packsize) * packsize), 1, 1), '.', '0' || " +
+												"(A.dtlgoodsqty - floor(A.dtlgoodsqty / packsize) * packsize), " +
+												"(dtlgoodsqty - floor(A.dtlgoodsqty / packsize) * packsize)) sj,  " +
+												"lotno, sthousename, posno, DECODE(NVL(ecodeflag,0),0,'否','是') ecodeflag, iodtlid FROM bms_st_io_dtl_finputin_v a " +
+												"WHERE USESTATUS = 1 AND NVL(DTLKEEPMANID, 0) = 0 AND A.TASKID = "+this.task,this.database);
+					for (let i in select_taskidxd){
+						this.uptaskxd.push(select_taskidxd[i]);
+					}
+					uptask.bind(this)();
+					this.uptaskzd = [];
+					this.uptaskxd = [];
+					let update_taskidzd = getResult("update BMS_UP_TASK_DOC set PRINTMANID= "+0+
+													",PRINTDATE=SYSDATE,PRINTCOUNT=nvl(PRINTCOUNT,0)+1 where TASKID = "+this.task,this.database);
+
+				} else if (convert_tasktype == 2) {
+					//查询未领取补货单，并打印
+					let select_stadjustidzd = getResult("SELECT A.STORERNAME,A.CREDATE,A.STADJUSTID,A.SOURCEID,A.HPXX,A.PHXX,A.SL,A.POSNO,A.STHOUSENAME, " +
+														"A.NEWPOSNO,A.NEWSTHOUSENAME FROM VUE_BHD_SZF_V A WHERE ROWNUM = 1 " +
+														"AND PRINTCOUNT IS NULL AND PRINTDATE IS NULL AND PRINTMANID IS NULL",this.database);
+					let convert_stadjustidzd = JSON.parse(JSON.stringify(select_stadjustidzd[0]));
+					this.task = convert_stadjustidzd.STADJUSTID;
+					this.stadjustzd.push(convert_stadjustidzd);
+					stadjust.bind(this)();
+					this.stadjustzd = [];
+					let update_stadjustidzd = getResult("update BMS_ST_ADJUST_TMP set PRINTMANID= "+0+
+														",PRINTDATE=SYSDATE,PRINTCOUNT=nvl(PRINTCOUNT,0)+1 where STADJUSTID = "+this.task,this.database);
+
+				} else if (convert_tasktype == 3) {
+					//查询未领取拣货单，并打印
+					let select_trpickidzd = getResult("SELECT A.PICKDOCID, A.WAVENO, A.CREDATE, A.WAVEID, A.COMPANYNAME, A.INVTYPENAME, A.MERMECDEPTNAME, A.GOODSDEPTNAME,A.COMEFROM, " +
+											"A.ISRECFLAG, A.MEMO, A.CONSIGNEE, A.PLACETYPENAME, A.TRANSLINENAME, A.INPUTMANNAME,A.GOODSUNITFLAG " +
+											"FROM VUE_JHD_SZF_V a WHERE a.xdusestatus = 2 and a.zdusestatus = 1 and a.drawstatus = 0 AND NVL(a.pickmanid, 0) = 0 " +
+											"AND a.pickdate IS NULL and NVL(a.printcount, 0) = 0 " +
+											"AND NVL(a.finishmanid, 0) = 0 Group By A.PICKDOCID, A.WAVENO, A.CREDATE, A.WAVEID, A.COMPANYNAME, A.INVTYPENAME, A.GOODSDEPTNAME,A.COMEFROM, " +
+											"A.MERMECDEPTNAME, A.ISRECFLAG, A.MEMO, A.CONSIGNEE, A.PLACETYPENAME, A.TRANSLINENAME, A.INPUTMANNAME,A.GOODSUNITFLAG",
+											this.database);
+					let convert_trpickidzd = JSON.parse(JSON.stringify(select_trpickidzd[0]));
+					this.task = convert_trpickidzd.PICKDOCID;
+					this.trpickzd.push(convert_trpickidzd);
+					let select_trpickidxd = getResult("SELECT A.GOODSNAME,A.GOODSTYPE,A.LOTNO,A.FACTORYNAME,A.HOLDERSNAME,A.PACKSIZE,A.ZL,A.ZJ,A.SJ,A.POSNO, " +
+                        "A.STHOUSENAME,A.ECODEFLAG FROM VUE_JHDMX_SZF_V A WHERE PICKDOCID = " + this.task + " order by sortnumber_a,sortnumber_b", this.database);
+					for (let i in select_trpickidxd){
+						this.trpickxd.push(select_trpickidxd[i]);
+					}
+					let select_trpickidsd = getResult("SELECT A.PICKDOCID,A.JHMXS,A.JHKCS,TO_char(SYSDATE,'yyyy-MM-dd hh24:mi:ss')RQ FROM VUE_JHDMXS_SZF_V A " +
+											"WHERE A.PICKDOCID = "+this.task,this.database);
+					let convert_trpickidsd = JSON.parse(JSON.stringify(select_trpickidsd[0]));
+					this.trpicksd.push(convert_trpickidsd);
+					trpick.bind(this)();
+					this.trpickzd = [];
+					this.trpickxd = [];
+					this.trpicksd = [];
+					let update_trpickzd = getResult("update BMS_TR_PICK_DOC set PRINTMANID= "+0+
+													",PRINTDATE=SYSDATE,PRINTCOUNT=nvl(PRINTCOUNT,0)+1 where PICKDOCID = "+this.task,this.database);
+				} else {
+					this.$alert('未知问题，请联系管理员', '警告', {
+						confirmButtonText: '确定'
+					});
+				}
+			}
+		}
+    }
+}</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped>
+    h3 {
+        margin: 40px 0 0;
+    }
+
+    ul {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    li {
+        display: inline-block;
+        margin: 0 10px;
+    }
+
+    a {
+        color: #42b983;
+    }
+
+    ::v-deep input::-webkit-outer-spin-button,
+    ::v-deep input::-webkit-inner-spin-button {
+        -webkit-appearance: none !important;
+    }
+
+    ::v-deep input[type='number'] {
+        -moz-appearance: textfield !important;
+    }
+
+    .hello {
+        width: 100%;
+    }
+
+    #left {
+        float: right;
+        width: 60%;
+        height: 700px;
+        font-size: 700px;
+        color: red;
+        line-height: 1;
+        border-image-source: linear-gradient(to bottom right, #ffffff, #b4efff) 1 100%;
+        border-radius: 20px;
+        background: repeating-linear-gradient(to bottom right, #ffffff, #b4efff);
+    }
+
+    #right {
+        float: left;
+        width: 39.5%;
+        height: 580px;
+        padding-top: 120px;
+        border-image-source: linear-gradient(to bottom left, #ffffff, #b4efff) 1 100%;
+        border-radius: 20px;
+        background: repeating-linear-gradient(to bottom left, #ffffff, #b4efff);
+    }
+</style>

@@ -28,7 +28,11 @@ namespace WQH
             Regex regex = new Regex(@"^[+]{0,1}(\d+)$");
             return regex.IsMatch(str);
         }
-
+        /// <summary>
+        /// 手机号码11位
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
         public static bool is_Phone(string str)
         {
             if (is_Integer(str))
@@ -65,7 +69,12 @@ namespace WQH
             }
             return sBuilder.ToString().ToUpper();
         }
-
+        /// <summary>
+        /// 日期格式
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        /// <exception cref="ApplicationException"></exception>
         public static string FormatTime(string str)
         {
             string[] arr = { };
@@ -91,6 +100,26 @@ namespace WQH
             {
                 throw new ApplicationException("日期转换失败");
             }
+        }
+
+        public static List<string> Split(string st, int Length)
+        {
+            int i = (int)Math.Ceiling((decimal)st.Length / Length);
+            WQH.system.IO.File.WriteLog(i.ToString(), 1);
+            List<string> arr = new List<string>();
+            for (int j = 0; j < i; j++)
+            {
+                if (j == i -1)
+                {
+                    arr.Add(st.Substring(j * Length, st.Length - j * Length));
+                }
+                else
+                {
+                    arr.Add(st.Substring(j * Length, Length));
+                }
+            }
+            return arr;
+
         }
     }
 }

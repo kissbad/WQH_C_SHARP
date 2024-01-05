@@ -30,3 +30,4 @@ D:\C#\WQH_C_SHARP\WebCore\obj\Debug\net6.0\refint\WebCore.dll
 D:\C#\WQH_C_SHARP\WebCore\obj\Debug\net6.0\WebCore.pdb
 D:\C#\WQH_C_SHARP\WebCore\obj\Debug\net6.0\WebCore.genruntimeconfig.cache
 D:\C#\WQH_C_SHARP\WebCore\obj\Debug\net6.0\ref\WebCore.dll
+D:\C#\WQH_C_SHARP\WebCore\obj\Debug\net6.0\WebCore.sourcelink.json
