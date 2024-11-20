@@ -11,6 +11,13 @@ namespace WQH.Xml
 {
     public class Sign
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="doc"></param>
+        /// <param name="Key"></param>
+        /// <param name="MSCert"></param>
+        /// <returns></returns>
         public static XmlElement SignXmlFile(XmlDocument doc, RSA Key, X509Certificate2 MSCert)
         {
             doc.PreserveWhitespace = false;
