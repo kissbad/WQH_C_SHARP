@@ -9,10 +9,13 @@ using System.Security.Cryptography.Xml;
 
 namespace WQH.Xml
 {
+    /// <summary>
+    /// 签名
+    /// </summary>
     public class Sign
     {
         /// <summary>
-        /// 
+        /// RSA算法证书签名XML文件（药监项目）
         /// </summary>
         /// <param name="doc"></param>
         /// <param name="Key"></param>
@@ -45,6 +48,18 @@ namespace WQH.Xml
             signedXml.ComputeSignature();
             XmlElement xmlDigitalSignature = signedXml.GetXml();
             return xmlDigitalSignature;
+        }
+
+        /// <summary>
+        /// 未通
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public static byte[] SignData(byte[] data,CngKey key) {
+            using (ECDsaCng ecdsa = new ECDsaCng(key)) {
+                return ecdsa.SignData(data);
+            }
         }
         public static void SignXml(XmlDocument xmlDoc, RSA rsaKey)
         {
