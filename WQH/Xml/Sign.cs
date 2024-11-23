@@ -58,6 +58,7 @@ namespace WQH.Xml
         /// <returns></returns>
         public static byte[] SignData(byte[] data,CngKey key) {
             using (ECDsaCng ecdsa = new ECDsaCng(key)) {
+                ecdsa.HashAlgorithm = CngAlgorithm.Sha256;
                 return ecdsa.SignData(data);
             }
         }
