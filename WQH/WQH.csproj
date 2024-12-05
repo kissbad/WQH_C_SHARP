@@ -62,6 +62,7 @@
     <Compile Include="Data\DbHelper.cs" />
     <Compile Include="Data\SQLHelper.cs" />
     <Compile Include="Office\Excel.cs" />
+    <Compile Include="PassWord.cs" />
     <Compile Include="Print\PDF.cs" />
     <Compile Include="Print\Printer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
