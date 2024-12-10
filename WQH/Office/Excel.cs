@@ -11,7 +11,11 @@ namespace WQH.Office
     public class Excel
     {
         public static string Logath = AppDomain.CurrentDomain.SetupInformation.ApplicationBase + "Excel\\";
-
+        /// <summary>
+        /// 不可用，Application实例化失败
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="list"></param>
         public static void cExcel<T>(List<T> list) {
             string FileName = Guid.NewGuid().ToString() + ".xlsx";
             if (!Directory.Exists(Logath))
@@ -19,6 +23,7 @@ namespace WQH.Office
                 Directory.CreateDirectory(Logath);
             }
 
+            
             Application excelApp = new Application();
             if (excelApp == null)
             {

@@ -23,7 +23,7 @@
             <asp:Button ID="Button2" runat="server" Text="Button" OnClick="Button2_Click" />
             <asp:Label ID="Label2" runat="server" Text="Label"></asp:Label>
         </div>
-        <asp:Button ID="Button4" runat="server" Text="Button" OnClick="Button3_Click"/>
+        <asp:Button ID="Button4" runat="server" Text="Button" OnClick="TextBox3_TextChanged"/>
     </form>
 </body>
 </html>
