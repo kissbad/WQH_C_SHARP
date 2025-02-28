@@ -50,6 +50,35 @@ namespace WQH.Xml
             return xmlDigitalSignature;
         }
 
+        public static XmlElement SignXmlFile2(XmlDocument doc, ECDsaCng Key, X509Certificate2 MSCert)
+        {
+            doc.PreserveWhitespace = false;
+
+            SignedXml signedXml = new SignedXml(doc);
+            signedXml.SigningKey = Key;
+            Reference reference = new Reference();
+            reference.Uri = "";
+            XmlDsigEnvelopedSignatureTransform env = new XmlDsigEnvelopedSignatureTransform();
+            reference.AddTransform(env);
+            signedXml.AddReference(reference);
+
+
+            X509IssuerSerial xserial;
+            xserial.IssuerName = MSCert.IssuerName.Name;
+            xserial.SerialNumber = MSCert.SerialNumber;
+
+            KeyInfo keyInfo = new KeyInfo();
+            KeyInfoX509Data kdata = new KeyInfoX509Data(MSCert);
+            kdata.AddIssuerSerial(xserial.IssuerName, xserial.SerialNumber);
+            keyInfo.AddClause(kdata);
+
+
+            signedXml.KeyInfo = keyInfo;
+            signedXml.ComputeSignature();
+            XmlElement xmlDigitalSignature = signedXml.GetXml();
+            return xmlDigitalSignature;
+        }
+
         /// <summary>
         /// 未通
         /// </summary>
